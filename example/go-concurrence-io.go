@@ -12,5 +12,7 @@ func main() {
 		panic(err)
 	}
 	defer file.Close()
-
+	for i := 0; i < 10000; i++ {
+		fmt.Fprintf(file, string(i))
+	}
 }
