@@ -1,18 +1,17 @@
 package main
 
-import (
-	"fmt"
-	"os"
-)
+import "fmt"
+
+type test struct {
+	name string
+	age  int
+}
+
+func (t test) testMethod() string {
+	return t.name + string(t.age)
+}
 
 func main() {
-	fmt.Println("Hello World")
-	file, err := os.Create("go-test.txt")
-	if err != nil {
-		panic(err)
-	}
-	defer file.Close()
-	for i := 0; i < 10000; i++ {
-		fmt.Fprintf(file, string(i))
-	}
+	hha := test{"hsdfsjdfhskfj", 15}
+	fmt.Println(hha.testMethod())
 }
