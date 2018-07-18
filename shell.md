@@ -45,3 +45,10 @@ EOF
 #!/bin/sh
 ssh user@ip "mkdir /var/test && touch /var/test/newFile.txt && echo \"test write\" >> /var/test/newFile.txt"
 ```
+
+## 检查服务器断开开启情况
+
+可以使用`nmap`或者`telnet`都可以检查，mac上可以通过`brew`安装。
+
+nmap: `nmap -Pn host -p port`
+telnet: `telnet host port`
