@@ -15,18 +15,18 @@ location /example {
 
 通过upstream模块
 
-## gRPC
-
-Nginx 1.13.10 原生支持gRPC，和HTTP/2 server push。
-
 ## `nginx: [emerg] zero size shared memory zone "allips"`
 
 因为有的虚拟目录定义了`limit_req`，限制了并发连接数，去掉即可。
 
-## 正则匹配用法
+## location 正则匹配
 
 比如，`/s/data`配置到一个指定的地址，`/s/data/{uuid}/query`到另一个地址，同时query后面还有一些get参数，所以我们应该做如下配置：
 
 ```lang=text
 location ~ /s/data/([a-z0-9]+)/query?$args
 ```
+
+## server_name
+
+`server`块中的`server_name`类似于`apache httpd server`中的`vhost`，匹配顺序： 完全匹配 > 通配符开始的字符串 > 通配符结束的字符串 > 正则表达式
