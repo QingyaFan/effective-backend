@@ -1,5 +1,21 @@
 # Nginx一些小技巧
 
+nginx在主机上启动一个主线程和多个子线程，子线程的数量可以设置，默认为CPU的core数量。主线程管理配置和子线程，每个子线程复杂处理请求。查看CPU数量和nginx线程的方法：
+
+linux:
+
+```sh
+lscpu
+ps aux | grep nginx
+```
+
+mac:
+
+```sh
+sysctl -n hw.ncpu
+ps aux | grep nginx
+```
+
 ## nginx用作proxy服务器
 
 作为代理服务器，Nginx可以转发请求，从而解决跨域的问题。例如，不同的端口的访问会被识别为跨域，而路径不会，我们可以把对不同的端口的访问转发为对不同的路径的访问，因此不会有跨域的问题。具体做法是在`server`段配置一个`location`段：
@@ -30,3 +46,9 @@ location ~ /s/data/([a-z0-9]+)/query?$args
 ## server_name
 
 `server`块中的`server_name`类似于`apache httpd server`中的`vhost`，匹配顺序： 完全匹配 > 通配符开始的字符串 > 通配符结束的字符串 > 正则表达式
+
+## 调试nginx
+
+开源Linux发行版的nginx不支持debug，需要重新编译`--with-debug`
+
+## nginx添加backslash去掉了port，怎么破？
