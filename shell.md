@@ -48,7 +48,22 @@ ssh user@ip "mkdir /var/test && touch /var/test/newFile.txt && echo \"test write
 
 ## 检查服务器断开开启情况
 
-可以使用`nmap`或者`telnet`都可以检查，mac上可以通过`brew`安装。
+`nmap`或者`telnet`都可以检查，mac上可以通过`brew`安装。
 
 nmap: `nmap -Pn host -p port`
 telnet: `telnet host port`
+
+## cp & rm
+
+删除文件夹本身： `rm -rf /dir`
+删除文件夹内部所有文件及文件夹： `rm -rf /dir/*`
+删除文件夹内部文件： `rm -f /dir/*`
+
+> -f 表示不需要询问
+
+拷贝a文件夹内所有文件到文件夹b： `cp -a /a/. /b/`
+
+## zip & unzip
+
+压缩到指定文件： `zip -r name.zip /folder`
+解压到指定目录： `unzip name.zip -d dir_name`
