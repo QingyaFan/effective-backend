@@ -67,3 +67,21 @@ telnet: `telnet host port`
 
 压缩到指定文件： `zip -r name.zip /folder`
 解压到指定目录： `unzip name.zip -d dir_name`
+
+## 程序暂停执行
+
+> 摘自Stack Overflow: https://stackoverflow.com/questions/21620406/how-do-i-pause-my-shell-script-for-a-second-before-continuing
+
+```sh
+sleep .5 # Waits 0.5 second.
+sleep 5  # Waits 5 seconds.
+sleep 5s # Waits 5 seconds.
+sleep 5m # Waits 5 minutes.
+sleep 5h # Waits 5 hours.
+sleep 5d # Waits 5 days.
+```
+
+## systemd
+
+ubuntu的Service Unit文件在`/lib/systemd/system/`
+centos在`/usr/lib/systemd/system/`

@@ -51,4 +51,8 @@ location ~ /s/data/([a-z0-9]+)/query?$args
 
 开源Linux发行版的nginx不支持debug，需要重新编译`--with-debug`
 
+## curl: connection reset by peer
+
+nginx启动后，使用`curl`访问nginx反向代理的服务，出现`connection reset by peer`，则表明nginx没有正常启动，查看日志，检查配置，修正错误。
+
 ## nginx添加backslash去掉了port，怎么破？
