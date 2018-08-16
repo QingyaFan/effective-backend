@@ -55,4 +55,34 @@ location ~ /s/data/([a-z0-9]+)/query?$args
 
 nginx启动后，使用`curl`访问nginx反向代理的服务，出现`connection reset by peer`，则表明nginx没有正常启动，查看日志，检查配置，修正错误。
 
+## 所有服务都 502
+
+犯了一个小错误，在docker中的nginx配置文件中，每个location中的proxy_pass都配置的是其他的容器名称来互相访问，这些名字并没有使用upstream定义，结果都出现了502。具体情况如下：
+
+```conf
+# 其中 container_name_1 是其他容器的名称
+location /svc1/ {
+    proxy_pass http://container_name_1/scv1/;
+}
+```
+
+这样是行不通的，location中的proxy_pass不带解析功能，必须定义一个upstream来做解析，修改如下即可：
+
+```conf
+upstream container_name_1 {
+    server container_name_1:port;
+}
+
+server {
+    ...
+    location /svc1/ {
+        proxy_pass http://container_name_1/scv1/;
+    }
+}
+```
+
+或者
+
+在 compose 文件中nginx定义处添加 `external_links`来添加可以访问的其他容器应用，这样docker会在nginx容器启动时在容器的`/etc/hosts`添加条目`container_name ip`的映射，这样，即使nginx不做解析，也可以利用`/etc/hosts`来做解析。
+
 ## nginx添加backslash去掉了port，怎么破？
