@@ -37,6 +37,8 @@ test multi line
 EOF
 ```
 
+`EOF`可以替换其它任意的标识符，**注意第二个`EOF`前不能有空格或其他字符**。
+
 ## script中远程执行命令
 
 `ssh user@ip cmd`，例如我想在远程直接在远程服务器创建一个目录，并在目录中创建一个文件，写入一些内容，可以如下这样写：
@@ -85,3 +87,7 @@ sleep 5d # Waits 5 days.
 
 ubuntu的Service Unit文件在`/lib/systemd/system/`
 centos在`/usr/lib/systemd/system/`
+
+## shell脚本自动化：ssh免密登陆
+
+使用`ssh-keygen`可以生成公钥，将公钥拷贝（ssh-copy-id）到目标服务器可以免登陆ssh通信。`scp`也是使用ssh，所以ssh执行命令和scp传文件都可以免登陆，这样方便shell脚本执行自动化任务。
