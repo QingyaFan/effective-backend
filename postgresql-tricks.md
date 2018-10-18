@@ -31,3 +31,5 @@ select replace(uuid_generate_v4()::text, '-', '') as uuid;
 ```
 
 2. `select md5(clock_timestamp()::text) as uuid`。
+
+## postgresql的`COPY`命令
