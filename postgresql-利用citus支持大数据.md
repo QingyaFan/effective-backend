@@ -19,6 +19,18 @@
 1. 不需要分布式存储大量数据
 2. worker之间需要进行大量数据传输和协作，因为并行执行的结果之间的整合需要大量的IO，反而会抵消并行执行节省的时间
 
+
+## 架构
+
+单 coordinator，多 worker。coordinator统筹协调工作，worker干活。
+
+三种表类型： Distributed Tables，Reference Tables，Local Tables
+
+多worker节点增强的是存储（1. 相对于单节点的IO瓶颈； 2. 突破单表存储限制）和CPU并行（然而现在Pg10+天然支持并行查询 ？？？）。
+
+允许通过加节点来提升性能。
+
+
 ## 测试
 
 Citus要求主键和外键包含`Distribution Column`
