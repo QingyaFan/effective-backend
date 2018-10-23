@@ -1,8 +1,10 @@
 # PostgreSQL 利用 citus 支持大数据
 
+## WHAT-是什么
+
 `Citus`本质上是一个PostgreSQL分表扩展，之前有一个类似的扩展叫做`pg_shard`，用于水平分表，现在官网也是推荐使用Citus代替，Citus整合了`pg_shard`功能，将数据分布式存储，并对查询在多个节点并行执行，加快查询效率。
 
-## 优点
+## WHY-优点
 
 1. 能够始终使用最新的PostgreSQL，因为像PostGIS一样，Citus是PostgreSQL的一个扩展，这一点上比同类GreenPalm好。
 
@@ -19,6 +21,17 @@
 1. 不需要分布式存储大量数据
 2. worker之间需要进行大量数据传输和协作，因为并行执行的结果之间的整合需要大量的IO，反而会抵消并行执行节省的时间
 
+> Citus provides distributed functionality by extending PostgreSQL using the hook and extension APIs. This allows users to benefit from the features that come with the rich PostgreSQL ecosystem. These features include, but aren’t limited to, support for a wide range of data types (including semi-structured data types like jsonb and hstore), operators and functions, full text search, and other extensions such as PostGIS and HyperLogLog. Further, proper use of the extension APIs enable compatibility with standard PostgreSQL tools such as pgAdmin and pg_upgrade.
+
+> As Citus is an extension which can be installed on any PostgreSQL instance, you can directly use other extensions such as hstore, hll, or PostGIS with Citus. However, there are two things to keep in mind. First, while including other extensions in shared_preload_libraries, you should make sure that Citus is the first extension. Secondly, you should create the extension on both the coordinator and the workers before starting to use it.
+
+## 集群规划
+
+同等CPU和RAM，原来单节点CPU和RAM等于worker的总和，集群相对于原来一般会有2~3倍的性能提升。主要原因是分表提升了资源利用率，并且索引更小。
+
+> For those migrating to Citus from an existing single-node database instance, we recommend choosing a cluster where the number of worker cores and RAM in total equals that of the original instance. In such scenarios we have seen 2-3x performance improvements because sharding improves resource utilization, allowing smaller indices etc.
+
+coordinator可以配置低一点，计算性能差不多就可以。
 
 ## 架构
 
@@ -28,8 +41,17 @@
 
 多worker节点增强的是存储（1. 相对于单节点的IO瓶颈； 2. 突破单表存储限制）和CPU并行（然而现在Pg10+天然支持并行查询 ？？？）。
 
-允许通过加节点来提升性能。
+## 添加worker
 
+加节点
+
+`select * from master_add_node('ip-or-name', port)`
+
+列出所有节点
+
+`SELECT * FROM master_get_active_worker_nodes();`
+
+*现有的表如果不经过`rebalence`，不会分布到新的worker上，新建的表会分布到新节点。*
 
 ## 测试
 
@@ -73,11 +95,6 @@ master节点需要磁盘稍大
 
 ## 测试性能
 
-测试项：
+a. 写入数据，一般操作
 
-- 缓冲区
-- 聚合点
-
-### 缓冲区
-
-### 聚合点
+b. pg_bench
