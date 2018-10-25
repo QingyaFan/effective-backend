@@ -1,8 +1,30 @@
 # PostgreSQL 利用 citus 支持大数据
 
-## WHAT-是什么
+PostgreSQL的一些极限：
 
-`Citus`本质上是一个PostgreSQL分表扩展，之前有一个类似的扩展叫做`pg_shard`，用于水平分表，现在官网也是推荐使用Citus代替，Citus整合了`pg_shard`功能，将数据分布式存储，并对查询在多个节点并行执行，加快查询效率。
+```txt
+Maximum size for a database? unlimited (32 TB databases exist)
+Maximum size for a table? 32 TB
+Maximum size for a row? 400 GB
+Maximum size for a field? 1 GB
+Maximum number of rows in a table? unlimited
+Maximum number of columns in a table? 250-1600 depending on column types
+Maximum number of indexes on a table? unlimited
+```
+
+使用单节点的PostgreSQL很多情况下是OK的，但32T的表放在一个机器节点上，查找一条记录，扫描一遍索引就要耗时很久。一般的做法是水平和垂直分表。
+
+## WHAT-Citus是什么
+
+`Citus`是一个PostgreSQL扩展，主要作用是水平自动分表，有一个类似扩展`pg_shard`已是deprecation状态，推荐使用Citus。Citus是单coordinator，多worker架构，coordinator统筹协调工作，worker是真正干活的。支持分布式冗余存储，并行查询计算。
+
+三个主要使用场景：
+
+- 数据分布式存储的应用（`Multi-tenant Application`）
+- 实时分析（`Real-Time Dashboards`）
+- 时间序列数据的查询分析（`Timeseries Data`）
+
+将数据分布式存储，并对查询在多个节点并行执行，加快查询效率。
 
 ## WHY-优点
 
@@ -32,14 +54,6 @@
 > For those migrating to Citus from an existing single-node database instance, we recommend choosing a cluster where the number of worker cores and RAM in total equals that of the original instance. In such scenarios we have seen 2-3x performance improvements because sharding improves resource utilization, allowing smaller indices etc.
 
 coordinator可以配置低一点，计算性能差不多就可以。
-
-## 架构
-
-单 coordinator，多 worker。coordinator统筹协调工作，worker干活。
-
-三种表类型： Distributed Tables，Reference Tables，Local Tables
-
-多worker节点增强的是存储（1. 相对于单节点的IO瓶颈； 2. 突破单表存储限制）和CPU并行（然而现在Pg10+天然支持并行查询 ？？？）。
 
 ## 添加worker
 
@@ -92,6 +106,10 @@ citus集群，56分钟
 master磁盘 -> SSD
 worker磁盘性能
 master节点需要磁盘稍大
+
+## TRY
+
+三种表类型： Distributed Tables，Reference Tables，Local Tables
 
 ## 测试性能
 
