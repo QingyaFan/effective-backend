@@ -86,3 +86,7 @@ server {
 在 compose 文件中nginx定义处添加 `external_links`来添加可以访问的其他容器应用，这样docker会在nginx容器启动时在容器的`/etc/hosts`添加条目`container_name ip`的映射，这样，即使nginx不做解析，也可以利用`/etc/hosts`来做解析。
 
 ## nginx添加backslash去掉了port，怎么破？
+
+## 限制访问频率
+
+limit_req

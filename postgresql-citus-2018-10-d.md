@@ -109,7 +109,33 @@ master节点需要磁盘稍大
 
 ## TRY
 
-三种表类型： Distributed Tables，Reference Tables，Local Tables
+上来就使用Citus方案的很少，一般都是遇到单节点支撑不了的数据和运算，才会想要切换到Citus，所以这里不讲从头开始，讲如何将现有的单节点或者普通集群迁移到Citus需要做的事情。
+
+### 迁移数据
+
+#### 允许服务间断的场景：
+
+首先将原来的数据备份，将一张表由单表调整为distributed，需要在灌数据之前声明，所以我们需要三个步骤：首先备份并恢复表结构，然后声明表为distributed，最后备份并恢复数据，此时数据会分布到各个worker。
+
+- 备份表结构
+
+`pg_dump -Fc --no-owner --schema-only --dbname db_name > db_name_schema.back`
+
+`pg_restore --dbname db_name db_name_schema.back`
+
+- 声明distributed
+
+`select * from create_distributed_table('table_name', 'id')`
+
+- 灌数据
+
+`pg_dump -Fc --no-owner --data-only --dbname db_name > db_name_data.back`
+
+`pg_restore --dbname db_name db_name_data.back`
+
+#### 不允许服务间断
+
+可以使用PostgreSQL的`logical replication`，将在用的老数据库指向Citus主节点，这样新老数据库处于同步状态，然后统一将服务的数据库连接地址切换到Citus。
 
 ## 测试性能
 
