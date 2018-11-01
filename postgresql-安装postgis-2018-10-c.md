@@ -14,6 +14,8 @@ yum install https://download.postgresql.org/pub/repos/yum/10/redhat/rhel-7-x86_6
 
 ### 1.2 然后`yum list postgresql*`查看所有可以安装的postgresql版本，然后安装相应的版本。
 
+`yum install -y postgresql10-server.x86_64`
+
 ### 1.3 装完会有以下目录，需要初始化数据库：
 
 /var/lib/pgsql/10/: backups data
@@ -51,9 +53,12 @@ CREATE DATABASE "test" OWNER xxx;
 ### 2.1 postgis
 
 `yum list postgis*`
-`yum install postgis24_10.x86_64`
-`psql -U xxx -d dbname -c "create extension postgis;"`
-`psql -U xxx -d dbname -c "create extension postgis_topology;"`
+
+```sh
+yum install postgis24_10.x86_64
+psql -U xxx -d dbname -c "create extension postgis;"
+psql -U xxx -d dbname -c "create extension postgis_topology;"
+```
 
 ### 2.2 pgrouting
 
@@ -94,3 +99,13 @@ dropdb，
 createdb，
 clusterdb，
 psql，
+
+## 优化参数
+
+shared_buffers
+work_mem
+fsync = off
+
+max_worker_processes = 64
+max_parallel_workers_per_gather = 32
+max_parallel_workers = 64
