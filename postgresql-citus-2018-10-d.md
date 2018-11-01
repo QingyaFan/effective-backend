@@ -44,6 +44,8 @@ Citus通过使用钩子和扩展API来实现PostgreSQL的分布式存储和并�
 ```sh
 systemctl start postgresql-10.service
 systemctl enable postgresql-10.service
+psql -U postgers -c "create extension citus;"
+psql -U postgers -c "create extension postgis;"
 ```
 
 ## 添加worker
