@@ -9,4 +9,4 @@
 
 ## PostgreSQL
 
-1. [PostgreSQL - 使用citus支持大数据](https://github.com/QingyaFan/effective-backend/blob/master/postgresql-citus-2018-10-d.md)
+1. [PostgreSQL - 使用citus支持地理大数据](https://github.com/QingyaFan/effective-backend/blob/master/postgresql-citus-2018-10-d.md)
