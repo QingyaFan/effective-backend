@@ -1,5 +1,7 @@
 # Postgresql/PostGIS安装
 
+PostGIS向PostgreSQL提供了空间数据支持，定义了新的类型：geometry、geographic和raster，基于现有的C库：GEOS、GDAL、proj.4和CGAL，在扩展的空间类型基础上，扩展了新的针对空间数据操作和分析的函数。
+
 centos 7.4
 
 ## 一、安装postgresql
